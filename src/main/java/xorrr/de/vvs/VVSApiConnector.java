@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 
 public class VVSApiConnector implements ApiConnector {
 
-	private String defaultStation;
+	private String station;
 	private final String apiUrl = "http://www2.vvs.de/vvs/widget/XML_DM_REQUEST"
 			+ "?zocationServerActive=1&lsShowTrainsExplicit=1&stateless=1&language=de"
 			+ "&SpEncId=0&anySigWhenPerfectNoOtherMatches=1&limit=5&depArr=departure"
@@ -37,8 +37,8 @@ public class VVSApiConnector implements ApiConnector {
 			+ "&itdTimeMinute=%s"
 			+ "&useRealtime=1";
 
-	public VVSApiConnector(String defaultStation) {
-		this.defaultStation = defaultStation;
+	public VVSApiConnector(String station) {
+		this.station = station;
 	}
 
 	public Document getDocument() {
@@ -58,7 +58,7 @@ public class VVSApiConnector implements ApiConnector {
 		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("Europe/Berlin"));
 		calendar.setTime(date);
 
-		String formattedUrl = String.format(apiUrl, defaultStation, calendar.get(Calendar.YEAR),
+		String formattedUrl = String.format(apiUrl, station, calendar.get(Calendar.YEAR),
 				calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
 				calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
