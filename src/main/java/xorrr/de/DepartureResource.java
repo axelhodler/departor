@@ -22,7 +22,7 @@ public class DepartureResource {
 	private VVSApiConnector con;
 
 	public DepartureResource(String defaultStation) {
-		con = new VVSApiConnector();
+		con = new VVSApiConnector(defaultStation);
 	}
 
 	@GET
