@@ -21,7 +21,6 @@ public class DepartureFinder {
 	private Document doc;
 	private XPath xPath;
 
-
 	public DepartureFinder(Document doc) {
 		this.doc = doc;
 		this.xPath = XPathFactory.newInstance().newXPath();
@@ -37,6 +36,7 @@ public class DepartureFinder {
 			Node n = nodes.item(i);
 
 			info.setLine(getLine(n));
+			info.setDirection(getDirection(n));
 			info.setRoute(getRoute(n));
 			info.setTime(getTime(n));
 
@@ -56,6 +56,18 @@ public class DepartureFinder {
 		}
 
 		return getLineAttributeContent(lineNode);
+	}
+
+	private String getDirection(Node node) {
+		Node directionNode = null;
+		try {
+			XPathExpression expr = xPath.compile(XPathExpressions.SERVING_LINE);
+			directionNode = (Node) expr.evaluate(node, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+
+		return directionNode.getAttributes().getNamedItem(XmlAttributes.DIRECTION).getTextContent();
 	}
 
 	private String getRoute(Node node) {
