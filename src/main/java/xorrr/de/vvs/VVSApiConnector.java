@@ -2,6 +2,10 @@ package xorrr.de.vvs;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,20 +27,36 @@ public class VVSApiConnector implements ApiConnector {
 			+ "?zocationServerActive=1&lsShowTrainsExplicit=1&stateless=1&language=de"
 			+ "&SpEncId=0&anySigWhenPerfectNoOtherMatches=1&limit=5&depArr=departure"
 			+ "&type_dm=any&anyObjFilter_dm=2&deleteAssignedStops=1&name_dm=5006206"
-			+ "&mode=direct&dmLineSelectionAll=1&itdDateYear=2014&itdDateMonth=09"
-			+ "&itdDateDay=02&itdTimeHour=23&itdTimeMinute=26&useRealtime=1";
+			+ "&mode=direct&dmLineSelectionAll=1&"
+			+ "itdDateYear=%s"
+			+ "&itdDateMonth=%s"
+			+ "&itdDateDay=%s"
+			+ "&itdTimeHour=%s"
+			+ "&itdTimeMinute=%s"
+			+ "&useRealtime=1";
 
 	public Document getDocument() {
 		HttpClient httpclient = HttpClientBuilder.create().build();
-		HttpGet getRequest = new HttpGet(apiUrl);
+		HttpGet getRequest = new HttpGet(useCurrentDate(apiUrl));
 		Document doc = null;
 		try {
 			doc = createDocument(httpclient, getRequest);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return doc;
+	}
+
+	private String useCurrentDate(String apiUrl) {
+		Date date = new Date();
+		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("Europe/Berlin"));
+		calendar.setTime(date);
+
+		String formattedUrl = String.format(apiUrl, calendar.get(Calendar.YEAR),
+				calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+				calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+
+		return formattedUrl;
 	}
 
 	private Document createDocument(HttpClient httpclient, HttpGet getRequest)
