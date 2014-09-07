@@ -19,19 +19,20 @@ import com.codahale.metrics.annotation.Timed;
 @Produces(MediaType.APPLICATION_JSON)
 public class DepartureResource {
 
-	private DepartureFinder f;
+	private VVSApiConnector con;
 
 	public DepartureResource(String defaultStation) {
-		VVSApiConnector con = new VVSApiConnector();
-		f = new DepartureFinder(con.getDocument());
+		con = new VVSApiConnector();
 	}
 
 	@GET
 	@Timed
 	public Map<String, List<DepartureInfo>> tellDepartureInfos() {
+		DepartureFinder f = new DepartureFinder(con.getDocument());
+
 		Map<String, List<DepartureInfo>> departures = new HashMap<>();
 		departures.put("departures", f.getDepatureInfos());
-		
+
 		return departures;
 	}
 }
