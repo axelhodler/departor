@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import xorrr.de.vvs.DepartureFinder;
 import xorrr.de.vvs.DepartureInfo;
+import xorrr.de.vvs.RequestFields;
 import xorrr.de.vvs.VVSApiConnector;
 
 import com.codahale.metrics.annotation.Timed;
@@ -30,8 +31,15 @@ public class DepartureResource {
 
 	@GET
 	@Timed
-	public Map<String, List<DepartureInfo>> tellDepartureInfos(@QueryParam("station") Optional<Integer> stationId) {
-		con = new VVSApiConnector(stationId.or(defaultStation));
+	public Map<String, List<DepartureInfo>> tellDepartureInfos(
+			@QueryParam("station") Optional<Integer> stationId,
+			@QueryParam("limit") Optional<Integer> limit) {
+		RequestFields reqFields = new RequestFields();
+		reqFields.setStation(stationId.or(defaultStation));
+		reqFields.setLimit(limit.or(5));
+
+		con = new VVSApiConnector(reqFields);
+
 		DepartureFinder f = new DepartureFinder(con.getDocument());
 
 		Map<String, List<DepartureInfo>> departures = new HashMap<>();

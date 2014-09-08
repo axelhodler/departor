@@ -23,10 +23,12 @@ import org.xml.sax.SAXException;
 
 public class VVSApiConnector implements ApiConnector {
 
-	private int station;
+	private RequestFields reqFields;
 	private final String apiUrl = "http://www2.vvs.de/vvs/widget/XML_DM_REQUEST"
 			+ "?zocationServerActive=1&lsShowTrainsExplicit=1&stateless=1&language=de"
-			+ "&SpEncId=0&anySigWhenPerfectNoOtherMatches=1&limit=5&depArr=departure"
+			+ "&SpEncId=0&anySigWhenPerfectNoOtherMatches=1"
+			+ "&limit=%s"
+			+ "&depArr=departure"
 			+ "&type_dm=any&anyObjFilter_dm=2&deleteAssignedStops=1"
 			+ "&name_dm=%s"
 			+ "&mode=direct&dmLineSelectionAll=1&"
@@ -37,8 +39,9 @@ public class VVSApiConnector implements ApiConnector {
 			+ "&itdTimeMinute=%s"
 			+ "&useRealtime=1";
 
-	public VVSApiConnector(int station) {
-		this.station = station;
+
+	public VVSApiConnector(RequestFields reqFields) {
+		this.reqFields = reqFields;
 	}
 
 	public Document getDocument() {
@@ -54,9 +57,10 @@ public class VVSApiConnector implements ApiConnector {
 	}
 
 	private String fillRequest(String apiUrl) {
-		RequestFields reqFields = buildRequestFields();
+		addTimeRequestFields();
 
 		String formattedUrl = String.format(apiUrl,
+				reqFields.getLimit(),
 				reqFields.getStation(),
 				reqFields.getYear(),
 				reqFields.getMonth(),
@@ -67,18 +71,17 @@ public class VVSApiConnector implements ApiConnector {
 		return formattedUrl;
 	}
 
-	private RequestFields buildRequestFields() {
+	private RequestFields addTimeRequestFields() {
 		Date date = new Date();
 		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("Europe/Berlin"));
 		calendar.setTime(date);
 
-		RequestFields reqFields = new RequestFields();
 		reqFields.setDay(calendar.get(Calendar.DAY_OF_MONTH));
 		reqFields.setYear(calendar.get(Calendar.YEAR));
 		reqFields.setMonth(calendar.get(Calendar.MONTH));
 		reqFields.setMinute(calendar.get(Calendar.MINUTE));
 		reqFields.setHour(calendar.get(Calendar.HOUR));
-		reqFields.setStation(station);
+
 		return reqFields;
 	}
 

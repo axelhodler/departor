@@ -8,6 +8,7 @@ public class RequestFields {
 	private int hour;
 	private int minute;
 	private int station;
+	private int limit;
 
 	public int getDay() {
 		return day;
@@ -56,4 +57,13 @@ public class RequestFields {
 	public void setStation(int station) {
 		this.station = station;
 	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
 }
