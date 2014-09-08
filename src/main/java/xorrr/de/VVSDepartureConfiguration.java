@@ -2,23 +2,20 @@ package xorrr.de;
 
 import io.dropwizard.Configuration;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class VVSDepartureConfiguration extends Configuration {
 
-	@NotEmpty
-	private String station;
+	private int stationId;
 
 	@JsonProperty
-	public String getStation() {
-		return station;
+	public int getStationId() {
+		return stationId;
 	}
 
 	@JsonProperty
-	public void setStation(String station) {
-		this.station = station;
+	public void setStationId(int station) {
+		this.stationId = station;
 	}
 
 }

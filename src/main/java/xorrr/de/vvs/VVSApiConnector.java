@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 
 public class VVSApiConnector implements ApiConnector {
 
-	private String station;
+	private int station;
 	private final String apiUrl = "http://www2.vvs.de/vvs/widget/XML_DM_REQUEST"
 			+ "?zocationServerActive=1&lsShowTrainsExplicit=1&stateless=1&language=de"
 			+ "&SpEncId=0&anySigWhenPerfectNoOtherMatches=1&limit=5&depArr=departure"
@@ -37,13 +37,13 @@ public class VVSApiConnector implements ApiConnector {
 			+ "&itdTimeMinute=%s"
 			+ "&useRealtime=1";
 
-	public VVSApiConnector(String station) {
+	public VVSApiConnector(int station) {
 		this.station = station;
 	}
 
 	public Document getDocument() {
 		HttpClient httpclient = HttpClientBuilder.create().build();
-		HttpGet getRequest = new HttpGet(useCurrentDate(apiUrl));
+		HttpGet getRequest = new HttpGet(fillRequest(apiUrl));
 		Document doc = null;
 		try {
 			doc = createDocument(httpclient, getRequest);
@@ -53,16 +53,33 @@ public class VVSApiConnector implements ApiConnector {
 		return doc;
 	}
 
-	private String useCurrentDate(String apiUrl) {
+	private String fillRequest(String apiUrl) {
+		RequestFields reqFields = buildRequestFields();
+
+		String formattedUrl = String.format(apiUrl,
+				reqFields.getStation(),
+				reqFields.getYear(),
+				reqFields.getMonth(),
+				reqFields.getDay(),
+				reqFields.getHour(),
+				reqFields.getMinute());
+
+		return formattedUrl;
+	}
+
+	private RequestFields buildRequestFields() {
 		Date date = new Date();
 		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("Europe/Berlin"));
 		calendar.setTime(date);
 
-		String formattedUrl = String.format(apiUrl, station, calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-
-		return formattedUrl;
+		RequestFields reqFields = new RequestFields();
+		reqFields.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+		reqFields.setYear(calendar.get(Calendar.YEAR));
+		reqFields.setMonth(calendar.get(Calendar.MONTH));
+		reqFields.setMinute(calendar.get(Calendar.MINUTE));
+		reqFields.setHour(calendar.get(Calendar.HOUR));
+		reqFields.setStation(station);
+		return reqFields;
 	}
 
 	private Document createDocument(HttpClient httpclient, HttpGet getRequest)

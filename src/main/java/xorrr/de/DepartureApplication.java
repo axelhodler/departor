@@ -10,11 +10,6 @@ public class DepartureApplication extends Application<VVSDepartureConfiguration>
 	}
 
 	@Override
-	public String getName() {
-		return "hello-world";
-	}
-
-	@Override
 	public void initialize(Bootstrap<VVSDepartureConfiguration> bootstrap) {
 		// TODO Auto-generated method stub
 	}
@@ -23,7 +18,7 @@ public class DepartureApplication extends Application<VVSDepartureConfiguration>
 	public void run(VVSDepartureConfiguration conf, Environment env)
 			throws Exception {
 		final DepartureResource resource = new DepartureResource(
-				conf.getStation()
+				conf.getStationId()
 		);
 
 		env.jersey().register(resource);

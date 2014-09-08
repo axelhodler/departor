@@ -22,16 +22,16 @@ import com.google.common.base.Optional;
 public class DepartureResource {
 
 	private VVSApiConnector con;
-	private String defaultStation;
+	private Integer defaultStation;
 
-	public DepartureResource(String defaultStation) {
+	public DepartureResource(Integer defaultStation) {
 		this.defaultStation = defaultStation;
 	}
 
 	@GET
 	@Timed
-	public Map<String, List<DepartureInfo>> tellDepartureInfos(@QueryParam("station") Optional<String> chosenStation) {
-		con = new VVSApiConnector(chosenStation.or(defaultStation));
+	public Map<String, List<DepartureInfo>> tellDepartureInfos(@QueryParam("station") Optional<Integer> stationId) {
+		con = new VVSApiConnector(stationId.or(defaultStation));
 		DepartureFinder f = new DepartureFinder(con.getDocument());
 
 		Map<String, List<DepartureInfo>> departures = new HashMap<>();
