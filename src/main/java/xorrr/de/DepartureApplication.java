@@ -1,5 +1,6 @@
 package xorrr.de;
 
+import xorrr.de.resources.DepartureResourceService;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -17,7 +18,7 @@ public class DepartureApplication extends Application<VVSDepartureConfiguration>
 	@Override
 	public void run(VVSDepartureConfiguration conf, Environment env)
 			throws Exception {
-		final DepartureResource resource = new DepartureResource(
+		final DepartureResourceService resource = new DepartureResourceService(
 				conf.getStationId()
 		);
 
