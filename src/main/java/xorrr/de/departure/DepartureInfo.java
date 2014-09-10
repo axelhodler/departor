@@ -1,4 +1,4 @@
-package xorrr.de.vvs;
+package xorrr.de.departure;
 
 
 public class DepartureInfo {

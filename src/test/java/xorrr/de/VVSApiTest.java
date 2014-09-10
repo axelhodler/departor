@@ -7,23 +7,24 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import xorrr.de.departure.DepartureInfo;
 import xorrr.de.mocks.VVSApiConnectorMock;
-import xorrr.de.vvs.DepartureFinder;
-import xorrr.de.vvs.DepartureInfo;
+import xorrr.de.vvs.XPathDepartureFinder;
 
 public class VVSApiTest {
 
-	private DepartureFinder finder;
+	private XPathDepartureFinder finder;
+	private VVSApiConnectorMock connector;
 
 	@Before
 	public void setUp() {
-		VVSApiConnectorMock connector = new VVSApiConnectorMock();
-		finder = new DepartureFinder(connector.getDocument());
+		connector = new VVSApiConnectorMock();
+		finder = new XPathDepartureFinder();
 	}
 
 	@Test
 	public void canGetDepartureInfos() {
-		List<DepartureInfo> infos = finder.getDepatureInfos();
+		List<DepartureInfo> infos = finder.getDepatureInfos(connector.getDocument());
 
 		DepartureInfo firstInfo = infos.get(0);
 

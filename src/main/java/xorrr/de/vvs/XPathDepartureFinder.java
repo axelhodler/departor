@@ -13,22 +13,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import xorrr.de.departure.DepartureFinder;
+import xorrr.de.departure.DepartureInfo;
 import xorrr.de.util.XPathExpressions;
 import xorrr.de.util.XmlAttributes;
 
-public class DepartureFinder {
+public class XPathDepartureFinder implements DepartureFinder {
 
-	private Document doc;
 	private XPath xPath;
 
-	public DepartureFinder(Document doc) {
-		this.doc = doc;
+	public XPathDepartureFinder() {
 		this.xPath = XPathFactory.newInstance().newXPath();
 	}
 
-	public List<DepartureInfo> getDepatureInfos() {
+	public List<DepartureInfo> getDepatureInfos(Document doc) {
 		List<DepartureInfo> infos = new ArrayList<>();
-		NodeList nodes = getDepatureNodes();
+		NodeList nodes = getDepatureNodes(doc);
 
 		for (int i = 0; i < nodes.getLength(); i++) {
 			DepartureInfo info = new DepartureInfo();
@@ -107,7 +107,7 @@ public class DepartureFinder {
 		return routeNode.getAttributes().getNamedItem(XmlAttributes.LINE_NUMBER).getTextContent();
 	}
 
-	private NodeList getDepatureNodes() {
+	private NodeList getDepatureNodes(Document doc) {
 		NodeList nodes = null;		
 		try {
 			XPathExpression expr = xPath.compile(XPathExpressions.DEPARTURES);

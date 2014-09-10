@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import xorrr.de.vvs.DepartureFinder;
-import xorrr.de.vvs.DepartureInfo;
+import xorrr.de.departure.DepartureFinder;
+import xorrr.de.departure.DepartureInfo;
 import xorrr.de.vvs.RequestFields;
 import xorrr.de.vvs.VVSApiConnector;
 
@@ -16,8 +16,10 @@ public class DepartureResourceService implements DepartureResource{
 
 	private VVSApiConnector con;
 	private Integer defaultStation;
+	private DepartureFinder finder;
 
-	public DepartureResourceService(Integer defaultStation) {
+	public DepartureResourceService(Integer defaultStation, DepartureFinder f) {
+		this.finder = f;
 		this.defaultStation = defaultStation;
 	}
 
@@ -30,10 +32,8 @@ public class DepartureResourceService implements DepartureResource{
 
 		con = new VVSApiConnector(reqFields);
 
-		DepartureFinder f = new DepartureFinder(con.getDocument());
-
 		Map<String, List<DepartureInfo>> departures = new HashMap<>();
-		departures.put("departures", f.getDepatureInfos());
+		departures.put("departures", finder.getDepatureInfos(con.getDocument()));
 
 		return departures;
 	}

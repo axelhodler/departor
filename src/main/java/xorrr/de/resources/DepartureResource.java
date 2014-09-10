@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import xorrr.de.vvs.DepartureInfo;
+import xorrr.de.departure.DepartureInfo;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
