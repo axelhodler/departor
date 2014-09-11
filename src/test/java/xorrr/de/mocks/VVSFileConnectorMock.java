@@ -7,12 +7,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
-import xorrr.de.vvs.ApiConnector;
+import xorrr.de.api.ApiConnector;
+import xorrr.de.api.RequestFields;
 
-public class VVSApiConnectorMock implements ApiConnector {
+public class VVSFileConnectorMock implements ApiConnector {
 
 	@Override
-	public Document getDocument() {
+	public Document getDocument(RequestFields reqFields) {
 		ClassLoader classloader = Thread.currentThread()
 				.getContextClassLoader();
 		InputStream is = classloader.getResourceAsStream("response.xml");

@@ -1,4 +1,4 @@
-package xorrr.de.vvs;
+package xorrr.de.api.vvs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import xorrr.de.departure.DepartureFinder;
+import xorrr.de.api.ApiConnector;
+import xorrr.de.api.DepartureFinder;
+import xorrr.de.api.RequestFields;
 import xorrr.de.departure.DepartureInfo;
 import xorrr.de.util.XPathExpressions;
 import xorrr.de.util.XmlAttributes;
@@ -21,14 +23,16 @@ import xorrr.de.util.XmlAttributes;
 public class XPathDepartureFinder implements DepartureFinder {
 
 	private XPath xPath;
+	private ApiConnector apiConnector;
 
-	public XPathDepartureFinder() {
+	public XPathDepartureFinder(ApiConnector con) {
+		this.apiConnector = con;
 		this.xPath = XPathFactory.newInstance().newXPath();
 	}
 
-	public List<DepartureInfo> getDepatureInfos(Document doc) {
+	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields) {
 		List<DepartureInfo> infos = new ArrayList<>();
-		NodeList nodes = getDepatureNodes(doc);
+		NodeList nodes = getDepatureNodes(apiConnector.getDocument(reqFields));
 
 		for (int i = 0; i < nodes.getLength(); i++) {
 			DepartureInfo info = new DepartureInfo();
