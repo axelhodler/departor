@@ -5,7 +5,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import xorrr.de.api.vvs.VVSApiConnector;
 import xorrr.de.api.vvs.XPathDepartureFinder;
-import xorrr.de.resources.DepartureResourceService;
+import xorrr.de.resources.service.DepartureResourceService;
 
 public class DepartureApplication extends Application<VVSDepartureConfiguration> {
 	public static void main(String[] args) throws Exception {
@@ -20,9 +20,7 @@ public class DepartureApplication extends Application<VVSDepartureConfiguration>
 	public void run(VVSDepartureConfiguration conf, Environment env)
 			throws Exception {
 		XPathDepartureFinder finder = new XPathDepartureFinder(new VVSApiConnector());
-		final DepartureResourceService resource = new DepartureResourceService(
-				conf.getStationId(), finder
-		);
+		final DepartureResourceService resource = new DepartureResourceService(conf, finder);
 
 		env.jersey().register(resource);
 	}

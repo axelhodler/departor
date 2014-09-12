@@ -12,15 +12,13 @@ import xorrr.de.api.vvs.XPathDepartureFinder;
 import xorrr.de.departure.DepartureInfo;
 import xorrr.de.mocks.VVSFileConnectorMock;
 
-public class VVSApiTest {
+public class XPathDepartureFinderTest {
 
 	private XPathDepartureFinder finder;
-	private VVSFileConnectorMock connector;
 
 	@Before
 	public void setUp() {
-		connector = new VVSFileConnectorMock();
-		finder = new XPathDepartureFinder(connector);
+		finder = new XPathDepartureFinder(new VVSFileConnectorMock());
 	}
 
 	@Test
