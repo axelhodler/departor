@@ -17,6 +17,7 @@ import xorrr.de.api.ApiConnector;
 import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.RequestFields;
 import xorrr.de.departure.DepartureInfo;
+import xorrr.de.util.TimeFormatter;
 import xorrr.de.util.XPathExpressions;
 import xorrr.de.util.XmlAttributes;
 
@@ -24,13 +25,16 @@ public class XPathDepartureFinder implements DepartureFinder {
 
 	private XPath xPath;
 	private ApiConnector apiConnector;
+	private TimeFormatter timeFormatter;
 
 	public XPathDepartureFinder(ApiConnector con) {
 		this.apiConnector = con;
 		this.xPath = XPathFactory.newInstance().newXPath();
 	}
 
-	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields) {
+	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields, TimeFormatter tf) {
+		this.timeFormatter = tf;
+
 		List<DepartureInfo> infos = new ArrayList<>();
 		NodeList nodes = getDepatureNodes(apiConnector.getDocument(reqFields));
 
@@ -96,7 +100,7 @@ public class XPathDepartureFinder implements DepartureFinder {
 		}
 
 		return getHourAttributeContent(timeNode) + ":"
-				+ getMinuteAttributeContent(timeNode);
+				+ timeFormatter.formatMinute(getMinuteAttributeContent(timeNode));
 	}
 
 	private String getMinuteAttributeContent(Node timeNode) {

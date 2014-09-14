@@ -46,7 +46,7 @@ public class VVSApiConnector implements ApiConnector {
 			+ "&itdTimeHour=%s"
 			+ "&itdTimeMinute=%s"
 			+ "&useRealtime=1";
-	
+
 	public Document getDocument(RequestFields reqFields) {
 		httpclient = HttpClientBuilder.create().build();
 		HttpGet getRequest = new HttpGet(fillRequest(reqFields));
@@ -83,7 +83,7 @@ public class VVSApiConnector implements ApiConnector {
 		reqFields.setYear(calendar.get(Calendar.YEAR));
 		reqFields.setMonth(calendar.get(Calendar.MONTH));
 		reqFields.setMinute(calendar.get(Calendar.MINUTE));
-		reqFields.setHour(calendar.get(Calendar.HOUR));
+		reqFields.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 
 		return reqFields;
 	}
