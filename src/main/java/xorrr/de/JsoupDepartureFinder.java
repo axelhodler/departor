@@ -11,6 +11,7 @@ import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.JsoupApiConnector;
 import xorrr.de.api.RequestFields;
 import xorrr.de.departure.DepartureInfo;
+import xorrr.de.util.JsoupSelectors;
 import xorrr.de.util.TimeFormatter;
 import xorrr.de.util.XmlAttributes;
 import xorrr.de.util.XmlTags;
@@ -18,6 +19,7 @@ import xorrr.de.util.XmlTags;
 public class JsoupDepartureFinder implements DepartureFinder {
 
 	private JsoupApiConnector api;
+	private TimeFormatter tf;
 
 	public JsoupDepartureFinder(JsoupApiConnector con) {
 		this.api = con;
@@ -26,10 +28,11 @@ public class JsoupDepartureFinder implements DepartureFinder {
 	@Override
 	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields,
 			TimeFormatter tf) {
+		this.tf = tf;
 		Elements departures = getDepartures(api.getDocument(reqFields));
 
 		List<DepartureInfo> infos = extractDepartures(departures);
-		
+
 		return infos;
 	}
 
@@ -47,11 +50,25 @@ public class JsoupDepartureFinder implements DepartureFinder {
 		info.setLine(getLine(e));
 		info.setRoute(getRoute(e));
 		info.setDirection(getDirection(e));
+		info.setTime(getTime(e));
 		return info;
 	}
 
+	private String getTime(Element e) {
+		return getHour(e) + ":" + getMinute(e);
+	}
+
+	private String getMinute(Element e) {
+		return tf.formatMinute(e.select(JsoupSelectors.TIME).attr(
+				XmlAttributes.DEPARTURE_MINUTE));
+	}
+
+	private String getHour(Element e) {
+		return e.select(JsoupSelectors.TIME).attr(XmlAttributes.DEPARTURE_HOUR);
+	}
+
 	private Elements getDepartures(Document doc) {
-		return doc.select("itdRequest > itdDepartureMonitorRequest > itdDepartureList > itdDeparture");
+		return doc.select(JsoupSelectors.DEPARTURES);
 	}
 
 	private String getDirection(Element e) {
@@ -59,7 +76,7 @@ public class JsoupDepartureFinder implements DepartureFinder {
 	}
 
 	private String getRoute(Element e) {
-		return e.select("itdServingLine > itdRouteDescText").text();
+		return e.select(JsoupSelectors.ROUTE).text();
 	}
 
 	private String getLine(Element e) {

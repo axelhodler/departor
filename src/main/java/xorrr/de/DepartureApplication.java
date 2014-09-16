@@ -3,8 +3,7 @@ package xorrr.de;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import xorrr.de.api.vvs.VVSApiConnector;
-import xorrr.de.api.vvs.XPathDepartureFinder;
+import xorrr.de.api.vvs.JsoupVVSApiConnector;
 import xorrr.de.resources.service.DepartureResourceService;
 
 public class DepartureApplication extends Application<VVSDepartureConfiguration> {
@@ -19,7 +18,7 @@ public class DepartureApplication extends Application<VVSDepartureConfiguration>
 	@Override
 	public void run(VVSDepartureConfiguration conf, Environment env)
 			throws Exception {
-		XPathDepartureFinder finder = new XPathDepartureFinder(new VVSApiConnector());
+		JsoupDepartureFinder finder = new JsoupDepartureFinder(new JsoupVVSApiConnector());
 		final DepartureResourceService resource = new DepartureResourceService(conf, finder);
 
 		env.jersey().register(resource);
