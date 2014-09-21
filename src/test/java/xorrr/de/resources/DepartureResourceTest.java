@@ -1,16 +1,15 @@
 package xorrr.de.resources;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-import java.util.Map;
+import javax.ws.rs.core.Response;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import xorrr.de.Config;
-import xorrr.de.departure.DepartureInfo;
 import xorrr.de.mocks.ConfigurationMock;
 import xorrr.de.mocks.DepartureFinderMock;
 import xorrr.de.resources.service.DepartureResourceService;
@@ -32,10 +31,24 @@ public class DepartureResourceTest {
 
 	@Test
 	public void canTellDepartureInfos() {
-		Map<String, List<DepartureInfo>> departureInfos = res.tellDepartureInfos(Optional.of(5), Optional.of(5));
+		Response departureInfos = res.tellDepartureInfos(Optional.of(5),
+				Optional.of(5));
 
 		assertTrue(finderMock.correctRequestFieldsUsed);
 		assertTrue(finderMock.gotDepartureInfos);
 		assertNotNull(departureInfos);
+	}
+
+	@Test
+	public void accessControlAllowOriginHeaderUsed() {
+		Response departureInfos = res.tellDepartureInfos(Optional.of(5),
+				Optional.of(5));
+
+		assertEquals("*", getACAOheader(departureInfos));
+	}
+
+	private Object getACAOheader(Response departureInfos) {
+		return departureInfos.getMetadata().get("Access-Control-Allow-Origin")
+				.get(0);
 	}
 }

@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import xorrr.de.Config;
 import xorrr.de.api.DepartureFinder;
@@ -46,7 +47,7 @@ public class DepartureResourceService implements DepartureResource {
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Invalid station ID supplied"),
 			@ApiResponse(code = 404, message = "departures not found") })
-	public Map<String, List<DepartureInfo>> tellDepartureInfos(
+	public Response tellDepartureInfos(
 			@ApiParam(value = "station id to fetch", required = false) @QueryParam("station") Optional<Integer> stationId,
 			@ApiParam(value = "amount of departures to fetch", required = false) @QueryParam("limit") Optional<Integer> limit) {
 
@@ -58,6 +59,6 @@ public class DepartureResourceService implements DepartureResource {
 		departures.put("departures", finder.getDepatureInfos(reqFields,
 				new StringTimeFormatter()));
 
-		return departures;
+		return Response.ok().entity(departures).header("Access-Control-Allow-Origin", "*").build();
 	}
 }
