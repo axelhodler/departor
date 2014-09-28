@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import xorrr.de.Config;
 import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.RequestFields;
-import xorrr.de.departure.DepartureInfo;
+import xorrr.de.model.DepartureInfo;
 import xorrr.de.resources.DepartureResource;
 import xorrr.de.util.StringTimeFormatter;
 

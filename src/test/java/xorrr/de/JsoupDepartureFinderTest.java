@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.RequestFields;
-import xorrr.de.departure.DepartureInfo;
 import xorrr.de.mocks.JsoupApiConnectorMock;
 import xorrr.de.mocks.TimeFormatterMock;
+import xorrr.de.model.DepartureInfo;
 
 public class JsoupDepartureFinderTest {
 

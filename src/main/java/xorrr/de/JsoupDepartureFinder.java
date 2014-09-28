@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
 import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.JsoupApiConnector;
 import xorrr.de.api.RequestFields;
-import xorrr.de.departure.DepartureInfo;
+import xorrr.de.model.DepartureInfo;
 import xorrr.de.util.JsoupSelectors;
 import xorrr.de.util.TimeFormatter;
 import xorrr.de.util.XmlAttributes;

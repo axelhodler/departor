@@ -5,7 +5,7 @@ import java.util.List;
 
 import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.RequestFields;
-import xorrr.de.departure.DepartureInfo;
+import xorrr.de.model.DepartureInfo;
 import xorrr.de.util.TimeFormatter;
 
 public class DepartureFinderMock implements DepartureFinder {
