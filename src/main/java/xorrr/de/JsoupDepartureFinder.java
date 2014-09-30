@@ -1,7 +1,10 @@
 package xorrr.de;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,23 +15,19 @@ import xorrr.de.api.JsoupApiConnector;
 import xorrr.de.api.RequestFields;
 import xorrr.de.model.DepartureInfo;
 import xorrr.de.util.JsoupSelectors;
-import xorrr.de.util.TimeFormatter;
 import xorrr.de.util.XmlAttributes;
 import xorrr.de.util.XmlTags;
 
 public class JsoupDepartureFinder implements DepartureFinder {
 
 	private JsoupApiConnector api;
-	private TimeFormatter tf;
 
 	public JsoupDepartureFinder(JsoupApiConnector con) {
 		this.api = con;
 	}
 
 	@Override
-	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields,
-			TimeFormatter tf) {
-		this.tf = tf;
+	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields) {
 		Elements departures = getDepartures(api.getDocument(reqFields));
 
 		List<DepartureInfo> infos = extractDepartures(departures);
@@ -55,16 +54,38 @@ public class JsoupDepartureFinder implements DepartureFinder {
 	}
 
 	private String getTime(Element e) {
-		return getHour(e) + ":" + getMinute(e);
+		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("Europe/Berlin"));
+		calendar.clear();
+
+		calendar.set(getYear(e), getMonth(e), getDay(e),
+				getHour(e), getMinute(e));
+
+		return String.valueOf(calendar.getTimeInMillis());
 	}
 
-	private String getMinute(Element e) {
-		return tf.formatMinute(e.select(JsoupSelectors.TIME).attr(
+	private int getMinute(Element e) {
+		return Integer.valueOf(e.select(JsoupSelectors.TIME).attr(
 				XmlAttributes.DEPARTURE_MINUTE));
 	}
 
-	private String getHour(Element e) {
-		return e.select(JsoupSelectors.TIME).attr(XmlAttributes.DEPARTURE_HOUR);
+	private int getHour(Element e) {
+		return Integer.valueOf(e.select(JsoupSelectors.TIME).attr(
+				XmlAttributes.DEPARTURE_HOUR));
+	}
+
+	private int getYear(Element e) {
+		return Integer.valueOf(e.select(JsoupSelectors.DATE).attr(
+				XmlAttributes.DEPARTURE_YEAR));
+	}
+
+	private int getDay(Element e) {
+		return Integer.valueOf(e.select(JsoupSelectors.DATE).attr(
+				XmlAttributes.DEPARTURE_DAY));
+	}
+
+	private int getMonth(Element e) {
+		return Integer.valueOf(e.select(JsoupSelectors.DATE).attr(
+				XmlAttributes.DEPARTURE_MONTH));
 	}
 
 	private Elements getDepartures(Document doc) {

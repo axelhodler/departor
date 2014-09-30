@@ -6,7 +6,6 @@ import java.util.List;
 import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.RequestFields;
 import xorrr.de.model.DepartureInfo;
-import xorrr.de.util.TimeFormatter;
 
 public class DepartureFinderMock implements DepartureFinder {
 
@@ -14,7 +13,7 @@ public class DepartureFinderMock implements DepartureFinder {
 	public boolean correctRequestFieldsUsed;
 
 	@Override
-	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields, TimeFormatter tf) {
+	public List<DepartureInfo> getDepatureInfos(RequestFields reqFields) {
 		if (reqFields.getLimit() == 5 && reqFields.getStation() == 5) {
 			correctRequestFieldsUsed = true;
 		}

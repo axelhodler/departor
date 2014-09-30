@@ -7,4 +7,5 @@ public final class JsoupSelectors {
 			+ " > itdDepartureList > itdDeparture";
 	public static final String ROUTE = XmlTags.SERVING_LINE + " > itdRouteDescText";
 	public static final String TIME = "itdDateTime > itdTime";
+	public static final String DATE = "itdDateTime > itdDate";
 }

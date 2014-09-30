@@ -16,7 +16,6 @@ import xorrr.de.api.DepartureFinder;
 import xorrr.de.api.RequestFields;
 import xorrr.de.model.DepartureInfo;
 import xorrr.de.resources.DepartureResource;
-import xorrr.de.util.StringTimeFormatter;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
@@ -56,8 +55,7 @@ public class DepartureResourceService implements DepartureResource {
 		reqFields.setLimit(limit.or(5));
 
 		Map<String, List<DepartureInfo>> departures = new HashMap<>();
-		departures.put("departures", finder.getDepatureInfos(reqFields,
-				new StringTimeFormatter()));
+		departures.put("departures", finder.getDepatureInfos(reqFields));
 
 		return Response.ok().entity(departures).header("Access-Control-Allow-Origin", "*").build();
 	}
